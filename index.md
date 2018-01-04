@@ -5,7 +5,8 @@ layout: default
 
 
 ### [RNN-LSTM基础](LSTM-basic)
-### [深入了解循环神经网路（一）————Rnn基础](Rnn-basic)
+
+### [深入了解循环神经网路（一）--Rnn基础](Rnn-basic)
 
 
 # [](#header-1)使用python实现RNN神经网络
