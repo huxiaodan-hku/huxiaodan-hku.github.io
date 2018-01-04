@@ -2,12 +2,12 @@
 layout: default
 ---
 
-# 神经网络知识点整理
-- ### [softmax原理及应用](softmax)
-- ### [RNN-LSTM基础](LSTM-basic)
+### 神经网络知识点整理
+- ##### [softmax原理及应用](softmax)
+- ##### [RNN-LSTM基础](LSTM-basic)
 
-# 深入了解循环神经网络系列
-- ### [深入了解循环神经网路（一）--Rnn基础](Rnn-basic)
+### 深入了解循环神经网络系列
+- ##### [深入了解循环神经网路（一）--Rnn基础](Rnn-basic)
 
 
 
