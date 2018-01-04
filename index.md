@@ -1,7 +1,8 @@
 ---
 layout: default
 ---
-
+### tensorflow基础
+- ##### [Variable](tf-Variable)
 ### 神经网络知识点整理
 - ##### [softmax原理及应用](softmax)
 - ##### [RNN-LSTM基础](LSTM-basic)
