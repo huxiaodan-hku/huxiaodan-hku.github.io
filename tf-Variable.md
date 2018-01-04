@@ -128,8 +128,8 @@ with tf.variable_scope("model") as scope:
   scope.reuse_variables()
   output2 = my_image_filter(input2)
 
-with tf.variable_scope("model") as scope:
-  output1 = my_image_filter(input1)
-  scope.reuse_variables()
-  output2 = my_image_filter(input2)
+def foo():
+  with tf.variable_scope("foo", reuse=tf.AUTO_REUSE):
+    v = tf.get_variable("v", [1])
+  return v
 ```
