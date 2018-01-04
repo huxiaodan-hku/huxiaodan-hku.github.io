@@ -6,15 +6,13 @@ Text can be **bold**, _italic_, or ~~strikethrough~~.
 
 [readme](aaaa.html).
 
-There should be whitespace between paragraphs.
 
-There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project.
+
+
 
 # [](#header-1)使用python实现RNN神经网络
 
-<td class="blob-code blob-code-inner js-file-line" id="file-1-4-variables-py-LC1">W <span class="pl-k">=</span> tf.Variable(np.random.rand(state_size<span class="pl-k">+</span><span class="pl-c1">1</span>, state_size), <span class="pl-v">dtype</span><span class="pl-k">=</span>tf.float32)</td>
-
-```
+```python
 # -*- coding: utf-8 -*-
 """
 Created on Wed Jan  3 13:47:26 2018
