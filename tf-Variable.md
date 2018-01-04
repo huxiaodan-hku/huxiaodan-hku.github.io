@@ -112,8 +112,8 @@ def my_image_filter(input_images):
         relu1 = conv_relu(input_images, [5, 5, 32, 32], [32])
     with tf.variable_scope("conv2"):
         # Variables created here will be named "conv2/weights", "conv2/biases".
-        return conv_relu(relu1, [5, 5, 32, 32], [32])
-
+        return conv_relu(relu1, [5, 5, 32, 32], [32])
+```
 当想反复使用同一个命名空间时，我们可以指定该变量可以*reuse*
 ```python
 with tf.variable_scope("model"):
