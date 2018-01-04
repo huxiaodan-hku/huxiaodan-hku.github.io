@@ -2,13 +2,10 @@
 layout: default
 ---
 
-Text can be **bold**, _italic_, or ~~strikethrough~~.
-
-[readme](aaaa.html).
 
 
-# [RNN-LSTM基础](https://huxiaodan-hku.github.io/LSTM-basic)
-# [深入了解循环神经网路（一）————Rnn基础](https://huxiaodan-hku.github.io/Rnn-basic)
+### [RNN-LSTM基础](LSTM-basic)
+### [深入了解循环神经网路（一）————Rnn基础](Rnn-basic)
 
 
 # [](#header-1)使用python实现RNN神经网络
