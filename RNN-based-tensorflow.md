@@ -7,117 +7,131 @@ Created on Wed Jan  3 13:47:26 2018
 @author: xiaodan.hu
 """
 
-
+import tensorflow as tf
 import numpy as np
 
-# 训练集合为10000个
-train_size = 50
-seq_length = 10
-test_size = 10
-hidden_size = 10
-learning_rate = 0.1
-vocab_size = 2  #这里我使用了one hot 编码的方式，你可以上网查一下
-
-
-Wxh = np.random.randn(hidden_size, vocab_size) * 0.01  # input to hidden
-Whh = np.random.randn(hidden_size, hidden_size) * 0.01  # hidden to hidden
-Why = np.random.randn(vocab_size, hidden_size) * 0.01  # hidden to output
-bh = np.zeros((hidden_size, 1))  # hidden bias
-by = np.zeros((vocab_size, 1))  # output bias
-mWxh, mWhh, mWhy = np.zeros_like(Wxh), np.zeros_like(Whh), np.zeros_like(Why)
-mbh, mby = np.zeros_like(bh), np.zeros_like(by)  # memory variables for Adagrad
-smooth_loss = -np.log(1.0 / vocab_size) * seq_length  # loss at iteration 0
-hprev = np.zeros((hidden_size, 1))  # reset RNN memory
-
-
-inputs = np.random.randint(2, size=(train_size, seq_length, 1))
-test_inputs = np.random.randint(2, size=(test_size, seq_length, 1))
-
-
-def lossFun(input_, target_, hprev):
-
-    xs, hs, ys, ps = {}, {}, {}, {}
-    hs[-1] = np.copy(hprev)
-    loss = 0
-    # forward pass
-    for t in range(len(input_)):
-        xs[t] = np.zeros((vocab_size, 1))  # encode in 1-of-k representation
-        xs[t][input_[t]] = 1
-        hs[t] = np.tanh(np.dot(Wxh, xs[t]) + np.dot(Whh,
-                                                    hs[t - 1]) + bh)  # hidden state
-        # unnormalized log probabilities for next chars
-        ys[t] = np.dot(Why, hs[t]) + by
-        # probabilities for next chars
-        ps[t] = np.exp(ys[t]) / np.sum(np.exp(ys[t]))
-        loss += -np.log(ps[t][target_[t], 0])  # softmax (cross-entropy loss)
-    # backward pass: compute gradients going backwards
-    dWxh, dWhh, dWhy = np.zeros_like(
-        Wxh), np.zeros_like(Whh), np.zeros_like(Why)
-    dbh, dby = np.zeros_like(bh), np.zeros_like(by)
-    dhnext = np.zeros_like(hs[0])
-
-    for t in reversed(range(len(input_))):
-        dy = np.copy(ps[t])
-        # backprop into y. see http://cs231n.github.io/neural-networks-case-study/#grad if confused here
-        dy[target_[t]] -= 1
-        dWhy += np.dot(dy, hs[t].T)
-        dby += dy
-        dh = np.dot(Why.T, dy) + dhnext  # backprop into h
-        dhraw = (1 - hs[t] * hs[t]) * dh  # backprop through tanh nonlinearity
-        dbh += dhraw
-        dWxh += np.dot(dhraw, xs[t].T)
-        dWhh += np.dot(dhraw, hs[t - 1].T)
-        dhnext = np.dot(Whh.T, dhraw)
-    for dparam in [dWxh, dWhh, dWhy, dbh, dby]:
-        # clip to mitigate exploding gradients
-        np.clip(dparam, -1, 1, out=dparam)
-    return loss, dWxh, dWhh, dWhy, dbh, dby, hs[len(input_) - 1]
+'''
+initialization
+'''
+seq_length  = 10            # each input includes 10 digits
+hidden_size = 5             # hidden layer has 5 neurons 
+learning_rate = 0.3         # gradient descenting rate
+batch_size = 1              # once processing number of inputs
+roll_digit = 2              # target (roll from input)
+num_batches = 1000          # train data size 
+total_series_length = num_batches * batch_size * seq_length
 
 '''
-train model
+Generate training data
 '''
-for counter, input_ in enumerate(inputs):
-    hprev = np.zeros((hidden_size, 1))  # reset RNN memory
-    target_ = np.roll(input_,2)
-    target_[0:2] = 0
-    loss, dWxh, dWhh, dWhy, dbh, dby, hprev = lossFun(input_, target_, hprev)
-    smooth_loss = smooth_loss * 0.999 + loss * 0.001
-    if counter % 100 == 0:
-        print("current progress %d,loss %f" % (counter, smooth_loss))
-    # perform parameter update with Adagrad
-    for param, dparam, mem in zip([Wxh, Whh, Why, bh, by],
-                                  [dWxh, dWhh, dWhy, dbh, dby],
-                                  [mWxh, mWhh, mWhy, mbh, mby]):
-        mem += dparam * dparam
-        param += -learning_rate * dparam / \
-            np.sqrt(mem + 1e-8)  # adagrad update
+inputs_value = np.array(np.random.choice(2, total_series_length, p=[0.5, 0.5]))
+targets_value = np.roll(inputs_value, roll_digit)
+for i in range(num_batches * batch_size):
+    targets_value[i * seq_length : (i * seq_length + roll_digit)] = 0
+
+inputs_value = inputs_value.reshape((batch_size, -1))  
+targets_value = targets_value.reshape((batch_size, -1))
 
 '''
-test 
+build rnn model
 '''
-for test_case in test_inputs:
-   
-    target_ = np.roll(test_case,2)
-    target_[0:2]=0
-    xs, hs, ys = {}, {}, {}
-    h = np.zeros((hidden_size, 1))  # reset RNN memory
-    output = []
-    for t in range(len(test_case)):
-        xs[t] = np.zeros((vocab_size, 1))  # encode in 1-of-k representation
-        xs[t][test_case[t]] = 1
-        h = np.tanh(np.dot(Wxh, xs[t]) + np.dot(Whh, h) + bh)
-        y = np.dot(Why, h) + by
-        p = np.exp(y) / np.sum(np.exp(y))
-        ix = np.random.choice(range(vocab_size), p=p.ravel())
-        if ix == 0:
-            output.append(0)
-        else:
-            output.append(1)
+batch_input_placeholder = tf.placeholder(tf.float32, [batch_size, seq_length])
+batch_target_placeholder = tf.placeholder(tf.int32, [batch_size, seq_length])
+
+
+W = tf.Variable(np.random.rand(hidden_size+1, hidden_size), dtype=tf.float32)
+b = tf.Variable(np.zeros((1,hidden_size)), dtype=tf.float32)
+
+W2 = tf.Variable(np.random.rand(hidden_size, num_classes),dtype=tf.float32)
+b2 = tf.Variable(np.zeros((1,num_classes)), dtype=tf.float32) 
+
+inputs_series = tf.unstack(batch_input_placeholder, axis=1)
+labels_series = tf.unstack(batch_target_placeholder, axis=1)
+
+init_state = tf.placeholder(tf.float32, [batch_size, hidden_size])
+
+current_state = init_state
+states_series = []
+for current_input in inputs_series: 
+    current_input = tf.reshape(current_input, [batch_size, 1])
+    input_and_state_concatenated = tf.concat([current_input, current_state], 1)
+    next_state = tf.tanh(tf.matmul(input_and_state_concatenated, W) + b)  # Broadcasted addition
+    states_series.append(next_state)
+    current_state = next_state
+
+
+logits_series = [tf.matmul(state, W2) + b2 for state in states_series] #Broadcasted addition
+predictions_series = [tf.nn.softmax(logits) for logits in logits_series]
+losses = [tf.nn.sparse_softmax_cross_entropy_with_logits(logits=logits, labels=labels) for logits, labels in zip(logits_series,labels_series)]
+total_loss = tf.reduce_mean(losses)
+train_step = tf.train.AdagradOptimizer(learning_rate).minimize(total_loss)
+
+'''
+write relative data to file
+'''
+
+
+input_txt = []
+target_txt = []
+weight_H_H_txt = []
+weight_X_H_txt = []
+weight_H_Y_txt = []
+weight_b_H_txt = []
+weight_b_Y_txt = [] 
+loss_list = []
+
+with tf.Session() as sess:
+    sess.run(tf.global_variables_initializer())
+
+    for index in range(num_batches):
+        _current_state = np.zeros((batch_size, hidden_size))
+        start_idx = index * seq_length
+        end_idx = start_idx + seq_length
+  
+        batchX = inputs_value[:,start_idx:end_idx]       
+        batchY = targets_value[:,start_idx:end_idx]
+        
+        _total_loss, _train_step, _current_state, _predictions_series, _states_series = sess.run(
+            [total_loss, train_step, current_state, predictions_series, states_series],
+            feed_dict={
+                batch_input_placeholder:batchX,
+                batch_target_placeholder:batchY,
+                init_state:_current_state
+            })
+        
+    
+        whole_state_series.append(_states_series)
+        loss_list.append(_total_loss) #lost
+        input_txt.append(batchX) #input
+        target_txt.append(batchY) #output
+        weight_H_H_txt.append(W.eval()[0:hidden_size,:])
+        weight_X_H_txt.append(W.eval()[hidden_size:hidden_size+1,:])
+        weight_H_Y_txt.append(W2.eval())
+        weight_b_H_txt.append(b.eval()) 
+        weight_b_Y_txt.append(b2.eval())     
+        print("Step",index, "Loss", _total_loss)
+        
+
+
+def write_to_file(data,file):
+    with open(file,'a',encoding='utf-8') as f:
+        for temp in data:
+            for index,each_batch in enumerate(temp):
+                for single_data in each_batch:
+                    f.write(str(single_data)+" ")
+                f.write('\n')
+                f.write("batch:%d\n"%index)
+                f.write('\n')
             
-    print("input")
-    print(test_case.reshape(10).tolist())
-    print("correct answer")
-    print(target_.reshape(10).tolist())
-    print("test answer")
-    print(output)
+            
+        
+filename="shiyishi.txt"
+
+write_to_file([input_txt,target_txt,weight_X_H_txt,weight_H_H_txt,weight_H_Y_txt,weight_b_H_txt,weight_b_Y_txt,whole_state_series],filename)
+with open(filename,'a',encoding='utf-8') as f:
+    for temp in loss_list:
+        f.write(str(temp))
+        f.write('\n')
+
+                
 ```
