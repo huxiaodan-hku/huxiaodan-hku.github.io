@@ -20,7 +20,7 @@ batch_size = 1              # once processing number of inputs
 roll_digit = 2              # target (roll from input)
 num_batches = 1000          # train data size 
 total_series_length = num_batches * batch_size * seq_length
-
+num_classes = 2
 '''
 Generate training data
 '''
@@ -79,6 +79,7 @@ weight_H_Y_txt = []
 weight_b_H_txt = []
 weight_b_Y_txt = [] 
 loss_list = []
+whole_state_series = []
 
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
@@ -132,6 +133,6 @@ with open(filename,'a',encoding='utf-8') as f:
     for temp in loss_list:
         f.write(str(temp))
         f.write('\n')
-
+                   
                 
 ```
