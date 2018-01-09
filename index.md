@@ -10,7 +10,7 @@ layout: default
 
 ### 深入了解循环神经网络系列
 - ##### [深入了解循环神经网路（一）--Rnn基础](Rnn-basic)
-- ##### [深入了解循环神经网路（二）--使用tensorflow（基础）实现rnn模型](Rnn-based-tensorflow)
+- ##### [深入了解循环神经网路（二）--使用tensorflow（基础）实现rnn模型](RNN-based-tensorflow)
 
 
 
