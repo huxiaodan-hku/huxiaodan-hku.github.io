@@ -1,4 +1,7 @@
-# LSTM原理与机制---数字偏移
+# Rnn原理与机制---
+这里以数字偏移为例
+RNN原理如下图
+![](https://camo.githubusercontent.com/510ef6f2d6a9e80439a8bacd7254a4dd9cade149/687474703a2f2f636f6c61682e6769746875622e696f2f706f7374732f323031352d30382d556e6465727374616e64696e672d4c53544d732f696d672f4c53544d332d53696d706c65524e4e2e706e67)
 ```python
 # -*- coding: utf-8 -*-
 """
