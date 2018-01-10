@@ -1,3 +1,6 @@
+#使用tensorflow Rnn_cell api 实现
+tensorflow 1.4
+python3+
 
 
 ```python
