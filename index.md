@@ -10,7 +10,4 @@ layout: default
 - ##### [RNN-LSTM基础](LSTM-basic)
 
 ### 深入了解循环神经网络系列
-- ##### [深入了解循环神经网路（一）--- Rnn基础](Rnn-basic)
-- ##### [深入了解循环神经网路（二）--- 使用tensorflow（基础）实现rnn模型](RNN-based-tensorflow)
-- ##### [深入了解循环神经网路（三）--- 使用tensorflow（BasicRnnCell）实现rnn模型](rnn_basic_cell)
-- ##### [深入了解循环神经网路（三）--- 使用tensorflow（LstmBasicCell）实现rnn模型]
+- ##### [深入了解循环神经网络之digit_roll](rnn_digit_roll/readme.md)
