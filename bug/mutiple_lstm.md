@@ -16,9 +16,9 @@ cell = tf.contrib.rnn.MultiRNNCell([cell] * num_layers, state_is_tuple=True)
 states_series, current_state = tf.nn.dynamic_rnn(cell, one_hot_batchX_placeholder, initial_state=rnn_tuple_state)
 ```
 ### 报错信息
->>>ValueError: Variable rnn/basic_lstm_cell/kernel already exists, disallowed. Did you mean to set reuse=True or reuse=tf.AUTO_REUSE in VarScope? Originally defined at:
+>ValueError: Variable rnn/basic_lstm_cell/kernel already exists, disallowed. Did you mean to set reuse=True or reuse=tf.AUTO_REUSE in VarScope? Originally defined at:
 
->>>File "D:\anaconda\envs\tensorflow\lib\site-packages\tensorflow\python\framework\ops.py", line 1470, in __init__self._traceback = self._graph._extract_stack()  # pylint: disable=protected-access
+>File "D:\anaconda\envs\tensorflow\lib\site-packages\tensorflow\python\framework\ops.py", line 1470, in __init__self._traceback = self._graph._extract_stack()  # pylint: disable=protected-access
 File "D:\anaconda\envs\tensorflow\lib\site-packages\tensorflow\python\framework\ops.py", line 2956, in create_op op_def=op_def)
 File "D:\anaconda\envs\tensorflow\lib\site-packages\tensorflow\python\framework\op_def_library.py", line 787, in _apply_op_helper
 op_def=op_def)
