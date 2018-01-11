@@ -1,6 +1,4 @@
----
-layout: default
----
+
 ### tensorflow基础
 - ##### [Variable](tf-Variable)
 - ##### [tensorflow常用命令](./TF_basic/TF_basic_index.md)
@@ -10,4 +8,4 @@ layout: default
 - ##### [RNN-LSTM基础](LSTM-basic)
 
 ### 深入了解循环神经网络系列
-- ##### [深入了解循环神经网络之digit_roll](rnn_digit_roll/readme.md)
+- ##### [深入了解循环神经网络---digit_roll实战](rnn_digit_roll/readme.md)
