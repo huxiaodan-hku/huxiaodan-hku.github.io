@@ -8,18 +8,23 @@ input:  0 1 0 1 0 0 1 0 1 1
 target: 0 0 0 0 1 0 1 0 0 1
 
 # 内容
-- 使用python实现
+##### 使用python实现
+
 [基于tensorflow1.4，使用rnn实现数字转移，从0开始系列一](rnn_basic.md)
 
-- 使用tensorflow底层语言实现
+##### 使用tensorflow底层语言实现
+
 [基于tensorflow1.4，使用rnn实现数字转移，从0开始系列二](rnn_basic_tensorflow.md)
 
-- 使用tensorflow api basic_cell 实现
+##### 使用tensorflow api basic_cell 实现
+
 [基于tensorflow1.4，使用rnn实现数字转移，从0开始系列三](rnn_basic_cell.md)
 
-- 使用tensorflow api lstm_cell 实现
+##### 使用tensorflow api lstm_cell 实现
+
 [基于tensorflow1.4，使用rnn实现数字转移，从0开始系列四](rnn_lstm_cell.md)
 
-- 使用tensorflow api mutiple_lstm_cell实现
+##### 使用tensorflow api mutiple_lstm_cell实现
+
 [基于tensorflow1.4，使用rnn实现数字转移，从0开始系列五](rnn_lstm_mutiple_cell.md)
 
