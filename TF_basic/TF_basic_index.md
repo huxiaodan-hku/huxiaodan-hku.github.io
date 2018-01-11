@@ -1,2 +1,2 @@
 # 矩阵处理
-[tf_squeeze](tf_squeeze) 减少维度数量
+[tf_squeeze](tf_squeeze.md) 减少维度数量
