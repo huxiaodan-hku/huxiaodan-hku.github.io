@@ -9,3 +9,6 @@
 
 ### 深入了解循环神经网络系列
 - ##### [深入了解循环神经网络---digit roll实战](rnn_digit_roll/readme.md)
+
+
+[distill-test](test)
