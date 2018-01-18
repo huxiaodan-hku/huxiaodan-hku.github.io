@@ -13,23 +13,32 @@
 <dt-article>
 
   <h1>digit roll</h1>
-  <p>利用了**数字转移**项目，从底层的python实现，到使用高层tensorflow api，一步一步掌握tensorflow及RNN的使用。</p>
+  
   <dt-byline></dt-byline>
+  <h2>digit roll</h2>
+  <p>利用了**数字转移**项目，从底层的python实现，到使用高层tensorflow api，一步一步掌握tensorflow及RNN的使用。</p>
+  <h2>训练数据</h2>
+  <p>训练的输入是一个只有0和1的二进制数组，输出是将输入向右偏移固定位数，然后偏移过的部分用0补充。例如下面的例子输出相对于输入偏移了3位。</p>
+  <p>input:  0 1 0 1 0 0 1 0 1 1</p>
+  <p>target: 0 0 0 0 1 0 1 0 0 1</p>
+  
   <p>
     <a href= rnn_basic.md>实现python版本Rnn</a> 
-  </h2> 
+  </p> 
   <p>
     <a href= rnn_basic_tensorflow.md>使用Tensorflow实现Rnn</a> 
   </p> 
   <p>
     <a href= rnn_basic_cell.md>使用Tensorflow Api实现Rnn</a> 
   </p> 
-  <h2>
+  <p>
     <a href= rnn_lstm_cell.md>使用Tensorflow Api实现Lstm-Rnn</a> 
   </p> 
   <p>
     <a href= rnn_lstm_mutiple_cell.md>使用Tensorflow Api实现Mutiple-Lstm-Rnn</a> 
   </p> 
+  <h2>
+    digit roll
 
 </dt-article>
 
@@ -43,18 +52,5 @@
   }
 </script>
 
-
-
-# digit roll
-利用了**数字转移**项目，从底层的python实现，到使用高层tensorflow api，一步一步掌握tensorflow及RNN的使用。
-
-# 训练数据
-训练的输入是一个只有0和1的二进制数组，输出是将输入向右偏移固定位数，然后偏移过的部分用0补充。
-例如下面的例子输出相对于输入偏移了3位。
-input:  0 1 0 1 0 0 1 0 1 1
-target: 0 0 0 0 1 0 1 0 0 1
-
-# 内容
-##### 使用python实现
 
 
