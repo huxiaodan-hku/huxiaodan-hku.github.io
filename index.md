@@ -8,7 +8,7 @@
 - ##### [RNN-LSTM基础](LSTM-basic)
 
 ### 深入了解循环神经网络系列
-- ##### [深入了解循环神经网络---digit roll实战](rnn_digit_roll/readme.md)
+- ##### [深入了解循环神经网络---digit roll实战](rnn_digit_roll/readme.html)
 
 
 [distill-test](test)
