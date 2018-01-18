@@ -1,14 +1,40 @@
+<!doctype html>
+<meta charset="utf-8">
+<script src="https://distill.pub/template.v1.js"></script>
 
-### tensorflow基础
-- ##### [Variable](tf-Variable)
-- ##### [tensorflow常用命令](./TF_basic/TF_basic_index.md)
+<script type="text/front-matter">
+  title: "Article Title"
+  description: "Description of the post"
+  authors:
+  - Hu Xiaodan: http://huxiaodan-hku.github.io
+  affiliations:
+  - Hu Xiaodan: https://github.com/huxiaodan-hku
+</script>
+<dt-article>
 
-### 神经网络知识点整理
-- ##### [softmax原理及应用](softmax)
-- ##### [RNN-LSTM基础](LSTM-basic)
+  <h1>机器学习及数据可视化知识整理</h1>
+  
+  <dt-byline></dt-byline>
+  <h2>tensorflow基础</h2>
+  <p><a href = tf-Variable>tensorflow variables</a></p>
+  <p><a href = ./TF_basic/TF_basic_index.md>tensorflow常用命令</a></p>
+  <h2>神经网络知识点整理</h2>
+  <p><a href = softmax>softmax原理及应用</a></p>
+  <p><a href = LSTM-basic>RNN-LSTM基础</a></p>
+  <h2>深入了解循环神经网络系列</h2>
+  <p><a href = softmax>softmax原理及应用</a></p>
+  <p><a href = rnn_digit_roll/readme.html>深入了解循环神经网络---digit roll实战</a></p>
+ 
+    
 
-### 深入了解循环神经网络系列
-- ##### [深入了解循环神经网络---digit roll实战](rnn_digit_roll/readme.html)
+</dt-article>
 
-
-[distill-test](test)
+<script type="text/bibliography">
+  @article{gregor2015draw,
+    title={DRAW: A recurrent neural network for image generation},
+    author={Gregor, Karol and Danihelka, Ivo and Graves, Alex and Rezende, Danilo Jimenez and Wierstra, Daan},
+    journal={arXivreprint arXiv:1502.04623},
+    year={2015},
+    url={https://arxiv.org/pdf/1502.04623.pdf}
+  }
+</script>
