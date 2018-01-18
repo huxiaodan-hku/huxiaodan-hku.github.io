@@ -1,0 +1,60 @@
+<!doctype html>
+<meta charset="utf-8">
+<script src="https://distill.pub/template.v1.js"></script>
+
+<script type="text/front-matter">
+  title: "Article Title"
+  description: "Description of the post"
+  authors:
+  - Hu Xiaodan: http://huxiaodan-hku.github.io
+  affiliations:
+  - Hu Xiaodan: https://github.com/huxiaodan-hku
+</script>
+<dt-article>
+
+  <h1>digit roll</h1>
+  <p>利用了**数字转移**项目，从底层的python实现，到使用高层tensorflow api，一步一步掌握tensorflow及RNN的使用。</p>
+  <dt-byline></dt-byline>
+  <h2>
+    <a href= rnn_basic.md>基于tensorflow1.4，使用rnn实现数字转移，从0开始系列一</a> 
+  </h2> 
+  <h2>
+    <a href= rnn_basic_tensorflow.md>基于tensorflow1.4，使用rnn实现数字转移，从0开始系列二</a> 
+  </h2> 
+  <h2>
+    <a href= rnn_basic_cell.md>基于tensorflow1.4，使用rnn实现数字转移，从0开始系列三</a> 
+  </h2> 
+  <h2>
+    <a href= rnn_lstm_cell.md>基于tensorflow1.4，使用rnn实现数字转移，从0开始系列四</a> 
+  </h2> 
+  <h2>
+    <a href= rnn_lstm_mutiple_cell.md>基于tensorflow1.4，使用rnn实现数字转移，从0开始系列五</a> 
+  </h2> 
+
+</dt-article>
+
+<script type="text/bibliography">
+  @article{gregor2015draw,
+    title={DRAW: A recurrent neural network for image generation},
+    author={Gregor, Karol and Danihelka, Ivo and Graves, Alex and Rezende, Danilo Jimenez and Wierstra, Daan},
+    journal={arXivreprint arXiv:1502.04623},
+    year={2015},
+    url={https://arxiv.org/pdf/1502.04623.pdf}
+  }
+</script>
+
+
+
+# digit roll
+利用了**数字转移**项目，从底层的python实现，到使用高层tensorflow api，一步一步掌握tensorflow及RNN的使用。
+
+# 训练数据
+训练的输入是一个只有0和1的二进制数组，输出是将输入向右偏移固定位数，然后偏移过的部分用0补充。
+例如下面的例子输出相对于输入偏移了3位。
+input:  0 1 0 1 0 0 1 0 1 1
+target: 0 0 0 0 1 0 1 0 0 1
+
+# 内容
+##### 使用python实现
+
+
