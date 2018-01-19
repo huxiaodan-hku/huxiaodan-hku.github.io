@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html class="ocks-org do-not-copy">
+<meta charset="utf-8">
+<title>Thinking with Joins</title>
+<style>
+
+@import url(../style.css?aea6f0a);
+
+circle {
+  fill: none;
+  fill-opacity: .2;
+  stroke: black;
+  stroke-width: 1.5px;
+}
+
+</style>
+
+<header>
+  <aside>February 5, 2012</aside>
+  <a href="../" rel="author">Mike Bostock</a>
+</header>
+
+<h1>Thinking with Joins</h1>
+
+<p>Say you’re making a basic scatterplot using <a href="https://d3js.org/">D3</a>, and you need to create some <a href="http://www.w3.org/TR/SVG/shapes.html#CircleElement">SVG circle</a> elements to visualize your data. You may be surprised to discover that D3 has no primitive for creating multiple DOM elements. Wait, <b><a href="https://www.destroyallsoftware.com/talks/wat">WAT?</a></b>
+
+<p>Sure, there’s the <a href="https://github.com/d3/d3/wiki/Selections#wiki-append">append</a> method, which you can use to create a single element.
+
+<aside>Here <code>svg</code> refers to a single-element selection containing an <code class="html">&lt;svg&gt;</code> element created previously (or selected from the current page, say).</aside>
+
+<pre><code>svg.append("circle")
+    .attr("cx", d.x)
+    .attr("cy", d.y)
+    .attr("r", 2.5);</code></pre>
+
+<p>But that’s just a single circle, and you want <i>many</i> circles: one for each data point. Before you bust out a <code>for</code> loop and brute-force it, consider this mystifying sequence from one of D3’s examples.
+
+<aside>Here <code>data</code> is an array of JSON objects with <code>x</code> and <code>y</code> properties, such as: <code>[{"x": 1.0, "y": 1.1}, {"x": 2.0, "y": 2.5}, …]</code>.</aside>
+
+<pre><code>svg.selectAll("circle")
+  .data(data)
+  .enter().append("circle")
+    .attr("cx", function(d) { return d.x; })
+    .attr("cy", function(d) { return d.y; })
+    .attr("r", 2.5);</code></pre>
+
+<p>This code does exactly what you need: it creates a circle element for each data point, using the <code>x</code> and <code>y</code> data properties for positioning. But what’s with the <code>selectAll("circle")</code>? Why do you have to select elements that you know don’t exist in order to create new ones? WAT.
+
+<p>Here’s the deal. Instead of telling D3 <i>how</i> to do something, tell D3 <i>what</i> you want. You want the circle elements to correspond to data. You want one circle per datum. Instead of instructing D3 to create circles, then, tell D3 that the selection <code>"circle"</code> should correspond to data. This concept is called the <i>data join</i>:
+
+<p id="join"><svg width="720" height="240">
+  <g transform="translate(0,128)">
+    <g transform="translate(300)">
+      <circle r="110" style="fill: rgb(49, 130, 189);"></circle>
+      <text y="-120" dy=".35em" text-anchor="middle" style="font-weight: bold;">Data</text>
+      <text x="-50" dy=".35em" text-anchor="middle">Enter</text>
+    </g>
+    <text x="360" dy=".35em" text-anchor="middle">Update</text>
+    <g transform="translate(420)">
+      <circle r="110" style="fill: rgb(230, 85, 13);"></circle>
+      <text y="-120" dy=".35em" text-anchor="middle" style="font-weight: bold;">Elements</text>
+      <text x="50" dy=".35em" text-anchor="middle">Exit</text>
+    </g>
+  </g>
+</svg>
+
+<p>Data points joined to existing elements produce the <i>update</i> (inner) selection. Leftover unbound data produce the <i>enter</i> selection (left), which represents missing elements. Likewise, any remaining unbound elements produce the <i>exit</i> selection (right), which represents elements to be removed.
+
+<p>Now we can unravel the mysterious enter-append sequence through the data join:<ol>
+
+<li><p>First, <code>svg.selectAll("circle")</code> returns a new empty selection, since the SVG container was empty. The parent node of this selection is the SVG container.
+
+<li><p>This selection is then joined to an array of data, resulting in three new selections that represent the three possible states: <i>enter</i>, <i>update</i>, and <i>exit</i>. Since the selection was empty, the update and exit selections are empty, while the enter selection contains a placeholder for each new datum.
+
+<li><p>The update selection is returned by <a href="https://github.com/d3/d3-selection/blob/master/README.md#selection_data"><i>selection</i>.data</a>, while the enter and exit selections hang off the update selection; <a href="https://github.com/d3/d3-selection/blob/master/README.md#selection_enter"><i>selection</i>.enter</a> thus returns the enter selection.
+
+<li><p>The missing elements are added to the SVG container by calling <a href="https://github.com/d3/d3-selection/blob/master/README.md#selection_append"><i>selection</i>.append</a> on the enter selection. This appends a new circle for each data point to the SVG container.
+
+</ol><p>Thinking with joins means declaring a relationship between a selection (such as <code>"circle"</code>) and data, and then implementing this relationship through the three <i>enter</i>, <i>update</i> and <i>exit</i> states.
+
+<p>But why all the trouble? Why not just a primitive to create multiple elements? The beauty of the data join is that it generalizes. While the above code only handles the <i>enter</i> selection, which is sufficient for static visualizations, you can extend it to support <a href="/mike/miserables/">dynamic</a> <a href="http://bl.ocks.org/mbostock/4062085">visualizations</a> with only minor modifications for <i>update</i> and <i>exit</i>. And that means you can visualize <a href="/mike/path/">realtime data</a>, allow <a href="http://bl.ocks.org/mbostock/4063663">interactive exploration</a>, and <a href="http://bl.ocks.org/mbostock/1256572">transition smoothly</a> between datasets!
+
+<p>Here’s an example of handling all three states:
+
+<pre><code>var circle = svg.selectAll("circle")
+  .data(data);
+
+circle.exit().remove();
+
+circle.enter().append("circle")
+    .attr("r", 2.5)
+  .merge(circle)
+    .attr("cx", function(d) { return d.x; })
+    .attr("cy", function(d) { return d.y; });</code></pre>
+
+<aside>To control how data is assign&shy;ed to elements, you can pro&shy;vide a <a href="../constancy/">key function</a>.</aside>
+
+<p>Whenever this code is run, it recomputes the data join and maintains the desired correspondence between elements and data. If the new dataset is smaller than the old one, the surplus elements end up in the <i>exit</i> selection and get removed. If the new dataset is larger, the surplus data ends up in the <i>enter</i> selection and new nodes are added. If the new dataset is exactly the same size, then all the elements are simply updated with new positions, and no elements are added or removed.
+
+<p>Thinking with joins means your code is more <i>declarative</i>: you handle these three states without any branching (<code>if</code>) or iteration (<code>for</code>). Instead you describe how elements should correspond to data. If a given <i>enter</i>, <i>update</i> or <i>exit</i> selection happens to be empty, the corresponding code is a no-op.
+
+<p>Joins also let you target operations to specific states, if needed. For example, you can set constant attributes (such as the circle’s radius, defined by the <code>"r"</code> attribute) on enter rather than update. By reselecting elements and minimizing DOM changes, you vastly improve rendering performance! Similarly, you can target animated transitions to specific states. For example, for entering circles to expand-in:
+
+<pre><code>circle.enter().append("circle")
+    .attr("r", 0)
+  .transition()
+    .attr("r", 2.5);</code></pre>
+
+<p>Likewise, to shrink-out:
+
+<pre><code>circle.exit().transition()
+    .attr("r", 0)
+    .remove();</code></pre>
+
+<p>Now you’re thinking with joins!
+
+<p>Comments or questions? <a href="http://news.ycombinator.com/item?id=3581614">Discuss on HN.</a>
+
+<h2>Addendum</h2>
+
+<p>I’ve written a series of examples on the <a href="http://bl.ocks.org/3808218">general update pattern</a> as a followup to this post.
+
+<footer>
+  <aside>February 5, 2012</aside>
+  <a href="../" rel="author">Mike Bostock</a>
+</footer>
+
+<script>
+
+GoogleAnalyticsObject = "ga", ga = function() { ga.q.push(arguments); }, ga.q = [], ga.l = +new Date;
+ga("create", "UA-48272912-3", "ocks.org");
+ga("send", "pageview");
+
+</script>
+<script src="//d3js.org/d3.v4.min.js"></script>
+<script async src="../highlight.min.js"></script>
+<script async src="//www.google-analytics.com/analytics.js"></script>
